@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+//?COLORS
+:root {
+  --h: 0;
+  --h-blue: 229;
+
+  --s-100: 100%;
+  --s: 0%;
+  
+  --l-100: 100%;
+  --l-65: 65%;
+  --l-0: 0%;
+
+  --primary-color: var(--h) var(--s) var(--l-0);
+  --secondary-color: var(--h) var(--s) var(--l-100);
+
+  --blue-color: var(--h-blue) var(--s-100) var(--l-65);
+}
+
+//?MAIN_ROOT
+:root {
+  --primary-outline: .125rem solid hsl(var(--primary-color));
+  --primary-border: var(--primary-outline);
+  --primary-border-radius: .4rem;
+}
+
+//?TYPE_ROOT
+:root {
+  --primary-font-family: 'Roboto', sans-serif;
+  --primary-font-size: 1.565rem;
+
+  --lg-font-size: 2.567rem;
+  --sm-font-size: 1.297rem;
+}
+
+//?WAVE_BUTTON_ROOT
+:root {
+  --wave-button-width: 8.75rem;
+  --wave-button-height: 3.5rem;
+  
+  --wave-button-width-lg: calc(var(--wave-button-width) * 1.428);
+  --wave-button-height-lg: calc(var(--wave-button-height) * 1.361);
+
+  --wave-button-width-sm: calc(var(--wave-button-width) * .826);
+  --wave-button-height-sm: calc(var(--wave-button-height) * .932);
+}
+
+//?MENU_HAMBURGER_ROOT
+:root {
+  --menu-hamburger-size: 5.465rem;
+  --menu-hamburger-size-sm: calc(var(--menu-hamburger-size) * 0.765);
+  --menu-hamburger-size-lg: calc(var(--menu-hamburger-size) * 1.238);
+}

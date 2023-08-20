@@ -1,0 +1,18 @@
+@use 'root.scss' as *;
+
+@mixin type_pattern($size: var(--primary-font-size)) {
+  font-family: var(--primary-font-family);
+  font-size: $size;
+}
+
+%add_accessibility {
+  position: relative;
+
+  &:active {
+    top: 2px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

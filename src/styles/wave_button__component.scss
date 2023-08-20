@@ -1,0 +1,117 @@
+@use '../abstract/styles/root.scss' as *;
+@use '../abstract/styles/patterns.scss' as *;
+
+@keyframes wave_rotation {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+button[data-wf-type="wave-button"] {
+  all: unset;
+
+  @extend %add_accessibility;
+  @include type_pattern();
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  width: var(--wave-button-width);
+  height: var(--wave-button-height);
+  outline: var(--primary-outline);
+  border-radius: var(--primary-border-radius);
+
+  &[data-size="lg"] {
+    @include type_pattern(var(--lg-font-size));
+    width: var(--wave-button-width-lg);
+    height: var(--wave-button-height-lg);
+  }
+
+  &[data-size="sm"] {
+    @include type_pattern(var(--sm-font-size));
+    width: var(--wave-button-width-sm);
+    height: var(--wave-button-height-sm);
+  }
+
+  box-shadow: 0 0 10px hsl(var(--primary-color) / .5) inset;
+  position: relative;
+  overflow: hidden;
+  color: hsl(var(--secondary-color));
+
+  &:hover > div,
+  &:active > div {
+    top: -200%;
+  }
+
+  > span {
+    position: relative;
+    z-index: 3;
+  }
+
+  > div {
+    position: absolute;
+    inset: 0;
+    background: hsl(var(--blue-color));
+    transition: all .8s ease-in-out;
+
+    &::before {
+      --wave-size: calc(var(--wave-button-width) * 1.75);
+      background: hsl(var(--primary-color));
+      border-radius: 44%;
+      bottom: 55%;
+      animation: wave_rotation 12.5s infinite ease-in-out;
+    }
+  
+    &::after {
+      --wave-size: calc(var(--wave-button-width) * 2);
+      background: hsl(0, 0%, 0%, .35);
+      border-radius: 48%;
+      bottom: 35%;
+      animation: wave_rotation 7s infinite linear;
+    }
+  
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: var(--wave-size);
+      height: var(--wave-size);
+      z-index: 1;
+      right: -45%;
+    }
+
+    &:before {
+      right: -35%;
+    }
+  }
+
+  &[data-size="lg"] > div::before {
+    right: -10%;
+    animation: wave_rotation 8.5s infinite ease-in-out;
+  }
+
+  &[data-size="lg"] > div::after {
+    right: -20%;
+    animation: wave_rotation 5.6s infinite ease-in-out;
+  }
+
+  &[data-size="lg"]:hover > div,
+  &[data-size="lg"]:active > div {
+    top: -300%;
+  }
+
+  &[data-size="sm"] > div::before {
+    right: -60%;
+    bottom: 60%;
+  }
+
+  &[data-size="sm"] > div::after {
+    right: -70%;
+  }
+}
