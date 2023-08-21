@@ -4,20 +4,12 @@ export enum ElementSize {
   Large = 'lg'
 }
 
-
 export interface ComponentOptions {
   size:ElementSize
 }
 
-export abstract class Component {
-  readonly elementOptions = {
-    size: ElementSize.Primary
-  }
-
-  constructor(options) {
-    if (options) this.elementOptions = options;
-  }
-
+export abstract class Component<T> {
+  readonly abstract elementOptions:T;
   protected abstract render():void;
   protected abstract addAttributes():void;
   abstract remove():void;

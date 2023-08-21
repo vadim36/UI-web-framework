@@ -1,14 +1,18 @@
-import { Component, ComponentOptions } from '../abstract/Abstract';
+import { Component, ComponentOptions,ElementSize } from '../abstract/Abstract';
 
 interface WaveButtonOptions extends ComponentOptions {}
 
-export class WaveButton extends Component {
+export class WaveButton extends Component<WaveButtonOptions> {
+  readonly elementOptions = {
+    size: ElementSize.Primary
+  }
+
   constructor(
     readonly $receivedElement:HTMLButtonElement,
     options?:WaveButtonOptions
   ) {
-      
-    super(options);
+    super();
+    if (options) this.elementOptions = options;
 
     this.render();
   }
