@@ -13,7 +13,12 @@ button[data-wf-type="menu-hamburger"] {
   border-radius: var(--primary-border-radius);
 
   width: var(--menu-hamburger-size);
+  max-height: var(--menu-hamburger-size);
   aspect-ratio: 1;
+
+  &[data-handler-active] {
+    z-index: 10001;
+  }
 
   &[data-size="sm"] {
     width: var(--menu-hamburger-size-sm);
@@ -24,19 +29,19 @@ button[data-wf-type="menu-hamburger"] {
   }
 
   &[data-animation-index="0"] {
-    &[aria-expanded="false"] :is(.line1, .line2, .line3) {
+    &[aria-expanded="true"] :is(.line1, .line2, .line3) {
       y: 45;
     }
 
-    &[aria-expanded="false"] .line1 {
+    &[aria-expanded="true"] .line1 {
       rotate: 45deg;
     }
   
-    &[aria-expanded="false"] .line3 {
+    &[aria-expanded="true"] .line3 {
       rotate: -45deg;
     }
 
-    &[aria-expanded="false"] .line2 {
+    &[aria-expanded="true"] .line2 {
       opacity: 0;
     }
   
@@ -49,7 +54,7 @@ button[data-wf-type="menu-hamburger"] {
       transform-origin: center;
     }
 
-    &[aria-expanded="false"] .line {
+    &[aria-expanded="true"] .line {
       transition: 
         y .2s ease-in,
         rotate .35s ease-in-out .2s,
@@ -78,15 +83,38 @@ button[data-wf-type="menu-hamburger"] {
       }
     }
 
-    &[aria-expanded="false"] .line1 {
+    &[aria-expanded="true"] .line1 {
       animation: animationMenuHamburger2_open 1s forwards;
     }
 
-    &[aria-expanded="false"] .line2 {
+    &[aria-expanded="true"] .line2 {
       --line-rotate: -45deg;
       --line-dashoffset: -4rem;
 
       animation: animationMenuHamburger2_open 1s forwards;
+    }
+  }
+
+  &[data-animation-index="null"] {
+    &[aria-expanded="true"] :is(.line1, .line2, .line3) {
+      y: 45;
+    }
+
+    &[aria-expanded="true"] .line1 {
+      rotate: 45deg;
+    }
+  
+    &[aria-expanded="true"] .line3 {
+      rotate: -45deg;
+    }
+
+    &[aria-expanded="true"] .line2 {
+      opacity: 0;
+    }
+  
+    .line {
+      fill: var(--menu-color, hsl(var(--primary-color)));
+      transform-origin: center;
     }
   }
 }
@@ -94,6 +122,11 @@ button[data-wf-type="menu-hamburger"] {
 *[data-wf-type="menu-hamburger-aside"] {
   display: none;
   
+  &[data-handler-active] {
+    position: relative;
+    z-index: 10000;
+  }
+
   &[aria-expanded="true"] {
     display: block;
   }

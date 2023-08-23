@@ -1,8 +1,9 @@
 import { Component, ComponentOptions,ElementSize } from '../abstract/Abstract';
 
 interface MenuHamburgerOptions extends ComponentOptions {
-  animationIndex?:number,
-  $asideElement?:HTMLElement
+  animationIndex?:number | null,
+  $asideElement?:HTMLElement,
+  optionalHandlers?:boolean
 }
 
 export class MenuHamburger extends Component<MenuHamburgerOptions> {
@@ -10,6 +11,7 @@ export class MenuHamburger extends Component<MenuHamburgerOptions> {
     size: ElementSize.Primary,
     animationIndex: 0
   }
+  readonly $backdropElement = document.createElement('div');
 
   constructor(
     readonly $receivedElement:HTMLButtonElement,
@@ -17,8 +19,9 @@ export class MenuHamburger extends Component<MenuHamburgerOptions> {
   ) {
     super();
     if (options) this.elementOptions = options;
-    if (this.elementOptions.animationIndex) {
-      this.validateIndexParam(this.elementOptions.animationIndex);
+    this.validateIndexParam(options?.animationIndex);
+    if (options?.optionalHandlers === undefined) {
+      this.elementOptions.optionalHandlers = false;
     }
 
     this.render();
@@ -69,36 +72,80 @@ export class MenuHamburger extends Component<MenuHamburgerOptions> {
 
   private renderAsideElement():void {
     this.elementOptions.$asideElement!.dataset.wfType = 'menu-hamburger-aside';    
-    this.elementOptions.$asideElement!.setAttribute('aria-expanded', String(true));
+    this.elementOptions.$asideElement!.setAttribute('aria-expanded', String(false));
+  
+    if (this.elementOptions.optionalHandlers) {
+      this.$backdropElement.dataset.wfType = 'backdrop';
+      this.elementOptions.$asideElement?.after(this.$backdropElement);
+    }
   }
 
   protected addAttributes():void {
     this.$receivedElement.dataset.wfType = "menu-hamburger";
     this.$receivedElement.dataset.animationIndex = String(this.elementOptions.animationIndex);
     this.$receivedElement.dataset.size = this.elementOptions.size;
-    this.$receivedElement.ariaExpanded = String(true);
+    this.$receivedElement.ariaExpanded = String(false);
   }
 
   protected setup():void {
-    this.$receivedElement.addEventListener('click', this.toggle.bind(this));
+    this.toggle = this.toggle.bind(this);
+    this.$receivedElement.addEventListener('click', this.toggle);
   }
 
-  public toggle():string {
+  public toggle():void {
     if (this.elementOptions.$asideElement) {
-      this.toggleAside();   
+      this.elementOptions.$asideElement.ariaExpanded = this.toggleHandler();
     }
 
-    return this.$receivedElement!.ariaExpanded = this.toggleHandler();
+    this.$receivedElement!.ariaExpanded = this.toggleHandler();
+    this.windowKeyHandler = this.windowKeyHandler.bind(this);
+
+    if (this.elementOptions.optionalHandlers && this.isOpen === true) {
+      this.$backdropElement.dataset.active = '';
+      this.$receivedElement.dataset.handlerActive = '';
+      this.elementOptions.$asideElement!.dataset.handlerActive = '';
+
+      this.$backdropElement.onclick = this.backdropClickHandler.bind(this);
+      this.$receivedElement.onkeydown = this.windowKeyHandler.bind(this);
+    }
+    
+    if (this.elementOptions.optionalHandlers && this.isOpen === false) {
+      delete this.$backdropElement.dataset.active;
+      delete this.$receivedElement.dataset.handlerActive;
+      delete this.elementOptions.$asideElement!.dataset.handlerActive;
+      
+      this.$backdropElement.onclick = null;
+      this.$receivedElement.onkeydown = null;
+    }
   }
 
-  private toggleHandler():string {
+  public toggleHandler():string {
     return this.isOpen
       ? String(false)
-      : String(true);
+      : String(true)
   }
 
-  private toggleAside():string {
-    return this.elementOptions.$asideElement!.ariaExpanded = this.toggleHandler();
+  private backdropClickHandler(event):void {
+    if (!(event.target as HTMLElement)
+        .closest('[data-wf-type="menu-hamburger-aside"]') &&
+      !(event.target as HTMLElement)
+        .closest('[data-wf-type="menu-hamburger"]')
+    ) {
+      if (this.elementOptions.$asideElement) {
+        this.elementOptions!.$asideElement!.ariaExpanded = String(false);
+      }
+      this.$receivedElement!.ariaExpanded = String(false);
+      this.$backdropElement.onclick = null;
+    }
+  }
+
+  private windowKeyHandler(event):void {
+    if (event.key === 'Escape') {
+      if (this.elementOptions.$asideElement) {
+        this.elementOptions!.$asideElement!.ariaExpanded = String(false);
+      }
+      this.$receivedElement!.ariaExpanded = String(false);
+    }
   }
 
   public remove(): void {
@@ -106,8 +153,9 @@ export class MenuHamburger extends Component<MenuHamburgerOptions> {
     this.$receivedElement.remove();
   }
 
-  private validateIndexParam(indexParam:number):number | undefined {
-    if (indexParam < 0) return this.elementOptions.animationIndex = 0;
-    if (indexParam > 1) return this.elementOptions.animationIndex = 1;
+  private validateIndexParam(indexParam:number | undefined | null):number | undefined  {
+    if (indexParam === undefined) return this.elementOptions.animationIndex = 0;
+    if (indexParam! < 0) return this.elementOptions.animationIndex = 0;
+    if (indexParam! > 1) return this.elementOptions.animationIndex = 1;
   }
 }
