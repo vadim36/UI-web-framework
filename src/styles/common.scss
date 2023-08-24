@@ -1,0 +1,12 @@
+div[data-wf-type="backdrop"] {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 10000;
+  background: none;
+
+  &[data-active] {
+    display: block;
+  }
+}
