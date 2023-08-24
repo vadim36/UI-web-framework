@@ -3,7 +3,7 @@ div[data-wf-type="backdrop"] {
   width: 100vw;
   height: 100vh;
   position: fixed;
-  z-index: 9999;
+  z-index: 10000;
   background: none;
 
   &[data-active] {

@@ -17,7 +17,7 @@ button[data-wf-type="menu-hamburger"] {
   aspect-ratio: 1;
 
   &[data-handler-active] {
-    z-index: 10001;
+    z-index: 10002;
   }
 
   &[data-size="sm"] {
@@ -124,7 +124,7 @@ button[data-wf-type="menu-hamburger"] {
   
   &[data-handler-active] {
     position: relative;
-    z-index: 10000;
+    z-index: 10001;
   }
 
   &[aria-expanded="true"] {
