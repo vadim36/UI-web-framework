@@ -4,18 +4,21 @@
 :root {
   --h: 0;
   --h-blue: 229;
+  --h-green: 104;
 
   --s-100: 100%;
   --s: 0%;
   
   --l-100: 100%;
   --l-65: 65%;
+  --l-50: 50%;
   --l-0: 0%;
 
   --primary-color: var(--h) var(--s) var(--l-0);
   --secondary-color: var(--h) var(--s) var(--l-100);
 
   --blue-color: var(--h-blue) var(--s-100) var(--l-65);
+  --green-color: var(--h-green) var(--s-100) var(--l-50);
 }
 
 //?MAIN_ROOT
@@ -23,6 +26,7 @@
   --primary-outline: .125rem solid hsl(var(--primary-color));
   --primary-border: var(--primary-outline);
   --primary-border-radius: .4rem;
+  --sm-border-radius: .22rem;
 }
 
 //?TYPE_ROOT
@@ -31,6 +35,8 @@
   --primary-font-size: 1.565rem;
 
   --lg-font-size: 2.567rem;
+  --xm-font-size: 1.865rem;
+  --xs-font-size: 1.378rem;
   --sm-font-size: 1.297rem;
 }
 

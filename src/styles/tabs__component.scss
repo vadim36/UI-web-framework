@@ -1,0 +1,82 @@
+@use '../abstract/styles/patterns.scss' as *;
+@use '../abstract/styles/root.scss' as *;
+
+div[data-wf-type="tabs"] {
+  all: unset;
+  box-sizing: border-box;
+
+  * {
+    all: unset;
+    box-sizing: inherit;
+  }
+
+  background: inherit;
+  min-width: 10rem;
+  min-height: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  font-size: var(--primary-font-size);
+  font-family: var(--primary-font-family);
+  outline: var(--primary-outline);
+  border-radius: var(--sm-border-radius);
+  color: inherit;
+
+  &[data-size="pm"] ul[data-wf-tablist] > li {
+    font-size: var(--xm-font-size);
+  }
+
+  &[data-size="lg"] ul[data-wf-tablist] > li {
+    font-size: var(--lg-font-size);
+  }
+
+  &[data-size="sm"] ul[data-wf-tablist] > li {
+    font-size: var(--xs-font-size);
+  }
+
+  &[data-size="sm"] > div[role="tabpanel"] {
+    font-size: var(--sm-font-size);
+  }
+
+  &[data-size="lg"] > div[role="tabpanel"] {
+    font-size: var(--xm-font-size);
+  }
+
+  > div[role="tabpanel"]:not(div[aria-selected="true"]) {
+    display: none;
+  }
+
+  > div[aria-selected="true"] {
+    flex: 1;
+  }
+
+  > div[role="tabpanel"] {
+    padding: .35rem;
+  }
+
+  ul[data-wf-tablist] {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+
+    > li {
+      flex: 1;
+      padding: 0 1rem;
+      transition: color .5s;
+
+      border-bottom: var(--primary-border);
+
+      &:not(:last-child) {
+        border-right: var(--primary-border);
+      }
+
+      &[aria-selected="true"] {
+        color: hsl(var(--green-color));
+      }
+
+      &:not([aria-selected="true"]):hover {
+        color: hsl(var(--blue-color));
+      }
+    }
+  }
+}

@@ -10,6 +10,11 @@ interface TabsOptions extends ComponentOptions {
   tabs: TabContentOption[]
 }
 
+type TabsElementObject = {
+  tab:HTMLLIElement,
+  tabPanel:HTMLDivElement
+}
+
 export class Tabs extends Component<TabsOptions> {
   readonly elementOptions:TabsOptions = {
     size: ElementSize.Primary,
@@ -20,6 +25,8 @@ export class Tabs extends Component<TabsOptions> {
       }
     ]
   }
+
+  readonly tabsElements: TabsElementObject[] = [];
 
   constructor(
     readonly $receivedElement:HTMLDivElement,
@@ -34,20 +41,21 @@ export class Tabs extends Component<TabsOptions> {
 
   protected render():void {
     this.$receivedElement.innerHTML = this.getTabsTemplate();
+    this.setup();
   }
 
   private getTabsTemplate():string {
     const $template = document.createElement('template');
     $template!.innerHTML = `
       <ul
-        data-tablist 
+        data-wf-tablist 
         aria-controls="[data-wf-type='tabs']" 
         aria-label="for-tabs-element"
         role="tablist">
       </ul>
     `;
 
-    const $tabsControlButtonsList = $template.content.querySelector('ul[data-tablist]');
+    const $tabsControlButtonsList = $template.content.querySelector('ul[data-wf-tablist]');
 
     this.renderTablist($tabsControlButtonsList as HTMLElement);
     this.renderTabpanel($template.content as DocumentFragment);
@@ -63,7 +71,7 @@ export class Tabs extends Component<TabsOptions> {
       $newControlTab.innerHTML = 
         `<a href="">${tabOption.tabName}</a>`;
       
-      this.addTabElementAttribute($newControlTab as HTMLLIElement, 'tab');
+      this.addTabElementAttribute($newControlTab as HTMLLIElement, 'tab', index);
       
       if (index == this.setCurrentTab()) {
         $newControlTab.setAttribute('aria-selected', String(true));
@@ -78,8 +86,15 @@ export class Tabs extends Component<TabsOptions> {
       const tabOption:TabContentOption = this.elementOptions.tabs[index];
 
       const $newContentTab = document.createElement('div');
-      this.addTabElementAttribute($newContentTab as HTMLDivElement, 'tabpanel');
-      $newContentTab.innerHTML = `${tabOption.tabContent}`;
+      this.addTabElementAttribute($newContentTab as HTMLDivElement, 'tabpanel', index);
+      
+      if (typeof tabOption.tabContent == 'string') {
+        $newContentTab.innerHTML = `${tabOption.tabContent}`;
+      }
+
+      if (tabOption.tabContent instanceof HTMLElement) {
+        $newContentTab.append(tabOption.tabContent);
+      }
 
       if (index == this.setCurrentTab()) {
         $newContentTab.setAttribute('aria-selected', String(true));
@@ -89,9 +104,12 @@ export class Tabs extends Component<TabsOptions> {
     }
   }
 
-  private addTabElementAttribute($tabElement:HTMLElement, tabRole:string):void {
+  private addTabElementAttribute($tabElement:HTMLElement, 
+    tabRole:string, index:number):void 
+  {
     $tabElement.setAttribute('role', tabRole);
     $tabElement.setAttribute('aria-selected', String(false));
+    $tabElement.setAttribute('data-tab-index', String(index));
   }
 
   private setCurrentTab() {
@@ -105,12 +123,37 @@ export class Tabs extends Component<TabsOptions> {
     return currentTabObjectIndex;
   }
 
+  private setup():void {
+    this.setupHandler = this.setupHandler.bind(this);
+    this.$receivedElement.addEventListener('click', this.setupHandler);
+  }
+
+  private setupHandler(event):void {
+    if (event.target.closest('li[role="tab"]')) {
+      event.preventDefault();
+
+      const selectedTab = event.target.closest('li[role="tab"]');
+      const selectedTabPanel = this.$receivedElement
+        .querySelector(`div[data-tab-index="${selectedTab.dataset.tabIndex}"`);
+      
+      this.$receivedElement
+        .querySelector('li[aria-selected="true"]')!.ariaSelected = String(false);
+      this.$receivedElement
+        .querySelector('div[aria-selected="true"]')!.ariaSelected = String(false);
+
+      selectedTab!.ariaSelected = String(true);
+      selectedTabPanel!.ariaSelected = String(true);
+    }
+  }
+
   protected addAttributes():void {
     this.$receivedElement.dataset.wfType = 'tabs';
     this.$receivedElement.dataset.size = this.elementOptions.size; 
   }
 
   public remove():void {
+    this.setupHandler = this.setupHandler.bind(this);
+    this.$receivedElement.removeEventListener('click', this.setupHandler);
     return this.$receivedElement.remove();
   }
 }
