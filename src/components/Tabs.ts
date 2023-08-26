@@ -51,7 +51,7 @@ export class Tabs extends Component<TabsOptions> {
         data-wf-tablist 
         aria-controls="[data-wf-type='tabs']" 
         aria-label="for-tabs-element"
-        role="tablist">
+        role="presentation">
       </ul>
     `;
 
@@ -72,8 +72,9 @@ export class Tabs extends Component<TabsOptions> {
         `<a href="">${tabOption.tabName}</a>`;
       
       this.addTabElementAttribute($newControlTab as HTMLLIElement, 'tab', index);
+      $newControlTab.setAttribute('tabindex', String(1));
       
-      if (index == this.setCurrentTab()) {
+      if (index == this.getCurrentTabIndex()) {
         $newControlTab.setAttribute('aria-selected', String(true));
       }
 
@@ -87,7 +88,9 @@ export class Tabs extends Component<TabsOptions> {
 
       const $newContentTab = document.createElement('div');
       this.addTabElementAttribute($newContentTab as HTMLDivElement, 'tabpanel', index);
-      
+      $newContentTab.setAttribute('aria-labelby', `tab-${index}`);
+      $newContentTab.setAttribute('tabindex', String(-1));
+
       if (typeof tabOption.tabContent == 'string') {
         $newContentTab.innerHTML = `${tabOption.tabContent}`;
       }
@@ -96,7 +99,7 @@ export class Tabs extends Component<TabsOptions> {
         $newContentTab.append(tabOption.tabContent);
       }
 
-      if (index == this.setCurrentTab()) {
+      if (index == this.getCurrentTabIndex()) {
         $newContentTab.setAttribute('aria-selected', String(true));
       }
 
@@ -112,7 +115,7 @@ export class Tabs extends Component<TabsOptions> {
     $tabElement.setAttribute('data-tab-index', String(index));
   }
 
-  private setCurrentTab() {
+  private getCurrentTabIndex() {
     let currentTabObjectIndex:number = [...this.elementOptions.tabs]
       .findIndex((tabOption:TabContentOption):boolean | undefined => {
         return tabOption.isCurrentTab;
