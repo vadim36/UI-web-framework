@@ -62,7 +62,6 @@ div[data-wf-type="tabs"] {
     > li {
       flex: 1;
       padding: 0 1rem;
-      transition: color .5s;
 
       border-bottom: var(--primary-border);
 
@@ -71,11 +70,12 @@ div[data-wf-type="tabs"] {
       }
 
       &[aria-selected="true"] {
-        color: hsl(var(--green-color));
+        color: hsl(var(--current-tab-color));
       }
 
-      &:not([aria-selected="true"]):hover {
-        color: hsl(var(--blue-color));
+      &:not([aria-selected="true"]):hover,
+      &:not([aria-selected="true"]):focus {
+        color: hsl(var(--next-tab-color));
       }
     }
   }

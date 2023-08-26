@@ -12,13 +12,17 @@
   --l-100: 100%;
   --l-65: 65%;
   --l-50: 50%;
+  --l-30: 30%;
+  --l-25: 25%;
   --l-0: 0%;
 
   --primary-color: var(--h) var(--s) var(--l-0);
   --secondary-color: var(--h) var(--s) var(--l-100);
 
   --blue-color: var(--h-blue) var(--s-100) var(--l-65);
-  --green-color: var(--h-green) var(--s-100) var(--l-50);
+  --green-color: var(--h-green) var(--l-100) var(--l-30);
+  --gray-color: var(--h) var(--s) var(--l-50);
+  --light-gray-color: var(--h) var(--s) var(--l-25);
 }
 
 //?MAIN_ROOT
@@ -57,4 +61,16 @@
   --menu-hamburger-size: 5.465rem;
   --menu-hamburger-size-sm: calc(var(--menu-hamburger-size) * 0.765);
   --menu-hamburger-size-lg: calc(var(--menu-hamburger-size) * 1.238);
+}
+
+//?TAB_ROOT
+:root {
+  --current-tab-color: var(--green-color);
+  --next-tab-color: var(--blue-color);
+}
+
+//?DROPDOWN_ROOT
+:root {
+  --dropdown-title-bg-color: var(--gray-color);
+  --dropdown-menu-bg-color: var(--light-gray-color);
 }
