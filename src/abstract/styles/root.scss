@@ -73,4 +73,8 @@
 :root {
   --dropdown-title-bg-color: var(--gray-color);
   --dropdown-menu-bg-color: var(--light-gray-color);
+  --dropdown-menu-padding: .5rem;
+  --dropdown-menu-top-indent: 1.15rem;
+  --dropdown-menu-shadow: 0 2px 5px 0 hsl(var(--primary-color) / .25);
+  --dropdown-menu-min-width: 6.4rem;
 }
