@@ -1,8 +1,7 @@
 div[data-wf-type="backdrop"] {
   display: none;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
+  position: absolute;
+  inset: 0;
   z-index: 10000;
   background: none;
 
