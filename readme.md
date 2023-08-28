@@ -61,3 +61,12 @@ new Tabs($element, {
       ]
     })
     ```
+* ✅Dropdown
+  * Simple Dropdown Menu☔
+  * ```js
+    new Dropdown(<DOM_ELEMENT>, {
+      size,
+      additionalStyles,
+      dropdownItem
+    })
+    ```
