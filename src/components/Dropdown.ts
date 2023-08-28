@@ -20,6 +20,9 @@ export class DropdownMenu extends Component<DropdownMenuOptions> {
   ) {
     super();
     if (options) this.elementOptions = options;
+    if (!options?.dropdownItem) {
+      this.elementOptions.dropdownItem = 'Hello world🥺'
+    }
 
     this.render();
   }
@@ -32,12 +35,21 @@ export class DropdownMenu extends Component<DropdownMenuOptions> {
     return this.$receivedElement.ariaExpanded === String(true);
   }
 
+  private get $backdrop():HTMLElement | null | undefined {
+    return this.$receivedElement.nextElementSibling
+      ?.closest('[data-wf-type="backdrop"]');
+  }
+
   protected render():void {
     this.$receivedElement.innerHTML = this.getDropdownTemplate();
 
     if (this.elementOptions.additionalStyles) {
       this.$receivedElement.dataset.addStyles = '';
     }
+
+    const $backdrop = document.createElement('div');
+    $backdrop.dataset.wfType = 'backdrop';
+    this.$receivedElement.after($backdrop);
 
     this.addAttributes();
     this.setup();
@@ -111,12 +123,26 @@ export class DropdownMenu extends Component<DropdownMenuOptions> {
   }
 
   private setup():void {
-    this.$receivedElement.addEventListener('click', this.clickHandler.bind(this));
+    this.clickHandler = this.clickHandler.bind(this);
+    this.keyHandler = this.keyHandler.bind(this);
+    this.backdropClickHandler = this.backdropClickHandler.bind(this);
+
+    this.$receivedElement.addEventListener('click', this.clickHandler);
+    this.$receivedElement.addEventListener('keydown', this.keyHandler);
+    this.$backdrop?.addEventListener('click', this.backdropClickHandler);
   }
 
-  private clickHandler(event):string {
+  private clickHandler(event):string | boolean {
     event.preventDefault();
+    this.closeAllDropdown(event);
+    this.toggle();
+  
+    return this.isOpen
+      ? this.$backdrop!.dataset.active = ''
+      : delete this.$backdrop?.dataset.active;
+  }
 
+  private closeAllDropdown(event):void {
     const $allActiveDropdowns = document
       .querySelectorAll('[data-wf-type="dropdown"][data-wf-active]');
 
@@ -125,15 +151,14 @@ export class DropdownMenu extends Component<DropdownMenuOptions> {
         $dropdown.removeAttribute('data-wf-active');
       });
     }
+
     event.target.closest('[data-wf-type="dropdown"]').dataset.wfActive = '';
-    
+  
     const $allDropdowns = document
       .querySelectorAll('[data-wf-type="dropdown"]:not([data-wf-active])');
-    $allDropdowns.forEach(($dropdown):void => {
+    return $allDropdowns.forEach(($dropdown):void => {
       return $dropdown.setAttribute('aria-expanded', String(false));
     });
-
-    return this.toggle();
   }
 
   public toggle():string {
@@ -143,8 +168,28 @@ export class DropdownMenu extends Component<DropdownMenuOptions> {
         : String(true);
   }
 
+  private keyHandler(event):string | void {
+    if (event.key == 'Escape') {
+      this.closeAllDropdown(event);
+      return this.close();
+    }
+  }
+
+  public close():string {
+    return this.$receivedElement.ariaExpanded = String(false);
+  }
+
+  private backdropClickHandler(event):void {
+    if (!event.target.closest('[data-wf-type="dropdown"]')) {
+      this.close();
+      this.$backdrop?.removeAttribute('data-active');
+    }
+  }
+
   public remove():void {
-    document.addEventListener('click', this.clickHandler.bind(this));
+    this.$receivedElement.removeEventListener('click', this.clickHandler);
+    this.$receivedElement.removeEventListener('keydown', this.keyHandler);
+    this.$backdrop?.removeEventListener('click', this.backdropClickHandler);
     this.$receivedElement.remove();
   }
 }
