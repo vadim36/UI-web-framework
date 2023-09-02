@@ -5,8 +5,10 @@
   --h: 0;
   --h-blue: 229;
   --h-green: 104;
+  --h-yellow: 60;
 
   --s-100: 100%;
+  --s-50: 50%;
   --s: 0%;
   
   --l-100: 100%;
@@ -23,6 +25,9 @@
   --green-color: var(--h-green) var(--l-100) var(--l-30);
   --gray-color: var(--h) var(--s) var(--l-50);
   --light-gray-color: var(--h) var(--s) var(--l-25);
+  --dark-gray-color: var(--h) var(--s) var(--l-25);
+  --yellow-color: var(--h-yellow) var(--s-100) var(--l-50);
+  --light-yellow-color: var(--h-yellow) var(--s-50) var(--l-50);
 }
 
 //?MAIN_ROOT
@@ -78,4 +83,20 @@
   --dropdown-menu-shadow: 0 2px 5px 0 hsl(var(--primary-color) / .25);
   --dropdown-menu-min-width: 6.4rem;
   --default-dropdown-color: var(--secondary-color);
+}
+
+//?RATING_ROOT
+:root {
+  --rating-stars-color: hsl(var(--yellow-color));
+  --hover-rating-star-color: hsl(var(--light-yellow-color));
+  --rating-non-selected-star-color: hsl(var(--gray-color));
+
+  --rating-stars-size: 3.25rem;
+  --rating-stars-size-sm: 2.7rem;
+  --rating-stars-size-lg: 4.75rem;
+
+  --rating-stars-gap: .35rem;
+
+  //?ADDITIONAL_STYLES
+  --rating-background-color: hsl(var(--dark-gray-color));
 }
