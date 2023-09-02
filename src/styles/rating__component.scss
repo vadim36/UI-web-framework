@@ -1,0 +1,49 @@
+@use '../abstract/styles/hidden.scss' as *;
+
+[data-wf-type="star-rating"] {
+  all: unset;
+  box-sizing: border-box;
+
+  * {
+    all: unset;
+    box-sizing: border-box;
+  }
+
+  display: inline-flex;
+  flex-direction: row-reverse;
+
+  > label[for="[data-wf-type='star-rating-link']"][aria-labelby="about_this_section"] {
+    visibility: hidden;
+    @extend .vs-hidden;
+  }
+}
+
+[data-wf-type="star-rating"][data-add-styles] {
+  background: var(--rating-background-color);
+  border-radius: var(--primary-border-radius);
+  padding: 0 .5rem;
+}
+
+button[data-wf-type="star-rating-link"] {
+  font-size: var(--rating-stars-size);
+  color: var(--rating-non-selected-star-color);
+  transition: color .25s ease-out;
+
+  &[data-checked] {
+    color: var(--rating-stars-color);
+  }
+
+  &:hover {
+    color: var(--hover-rating-star-color);
+  }
+}
+
+button[data-wf-type="star-rating-link"]:not([data-checked]):hover 
+~ button[data-wf-type="star-rating-link"]:not([data-checked]) {
+  color: var(--hover-rating-star-color);
+}
+
+button[data-wf-type="star-rating-link"][data-checked]:hover 
+~ button[data-wf-type="star-rating-link"][data-checked] {
+  color: var(--hover-rating-star-color);
+}
